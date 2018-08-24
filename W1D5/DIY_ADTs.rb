@@ -76,7 +76,7 @@ class Map
   end
 
   def show
-    p "#{}"
+    p map 
   end
 
 end
