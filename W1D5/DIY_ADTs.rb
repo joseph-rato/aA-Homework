@@ -50,9 +50,10 @@ class Map
     @map.each do |array_pairs|
       if array_pairs[0] == key
         array_pairs[-1] = value
-        break
+        return array_pairs
       else
         @map << [key, value]
+        return [key, value]
       end
     end
   end
@@ -67,6 +68,11 @@ class Map
   end
 
   def delete(key)
+    map.each_index do |i_array_pairs|
+      if map[i_array_pairs][0] == key
+        map.delete_at(i_array_pairs)
+      end
+    end
   end
 
   def show
