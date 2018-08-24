@@ -50,14 +50,20 @@ class Map
     @map.each do |array_pairs|
       if array_pairs[0] == key
         array_pairs[-1] = value
+        break
       else
         @map << [key, value]
-        p "no"
       end
     end
   end
 
   def get(key)
+    @map.each do |array_pairs|
+      if array_pairs[0] == key
+        return array_pairs[-1]
+      end
+    end
+    nil
   end
 
   def delete(key)
