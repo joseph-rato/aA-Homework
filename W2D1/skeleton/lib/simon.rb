@@ -23,12 +23,12 @@ class Simon
     @sequence_length += 1
     # debugger
     input = require_sequence
-    round_success_message
-    # debugger
-    # if check_seq_to_input(input) == false
-    #   return @game_over = true
-    # end
     # round_success_message
+    # debugger
+    if check_seq_to_input(input) == false
+      return @game_over = true
+    end
+    round_success_message
   end
 
   def show_sequence
