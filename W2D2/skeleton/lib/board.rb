@@ -47,18 +47,26 @@ class Board
       if first_cup == 13
         first_cup = 0
       end
-      # if current_player_name == player1
-      #   next if first_cup == 13
-      # else
-      #   next if first_cup == 6
-      # end 
+      if current_player_name == @player1
+        next if first_cup == 13
+      else
+        next if first_cup == 6
+      end
       # p @cups[first_cup]
       @cups[first_cup] << turn_stones.shift
     end
     self.render
+    next_turn(first_cup)
   end
 
   def next_turn(ending_cup_idx)
+      if @cups[ending_cup_idx].empty?
+        return :switch
+      elsif @cups[ending_cup_idx] == 6 || @cups[ending_cup_idx] == 13
+        return :prompt
+      elsif @cups[ending_cup_idx].length > 0
+        return ending_cup_idx
+      end
     # helper method to determine whether #make_move returns :switch, :prompt, or ending_cup_idx
   end
 
