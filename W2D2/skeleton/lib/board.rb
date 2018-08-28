@@ -40,10 +40,22 @@ class Board
     turn_stones = []
     stones = @cups[start_pos].shift(cups[start_pos].size)
     turn_stones += stones
-    p turn_stones
-    @cups[(start_pos+1)...turn_stones.length].each do |cup|
-      cup += [turn_stones.shift]
+    # p turn_stones
+    first_cup = start_pos
+    until turn_stones.empty?
+      first_cup += 1
+      if first_cup == 13
+        first_cup = 0
+      end
+      # if current_player_name == player1
+      #   next if first_cup == 13
+      # else
+      #   next if first_cup == 6
+      # end 
+      # p @cups[first_cup]
+      @cups[first_cup] << turn_stones.shift
     end
+    self.render
   end
 
   def next_turn(ending_cup_idx)
