@@ -6,7 +6,7 @@ Instructions: implement all of the pending specs (the `it` statements without bl
 =end
 
 describe Dessert do
-  let(:brownie) {Dessert.new("brownie", 50, "chef")}
+  subject(:brownie) {Dessert.new("brownie", 50, "chef")}
   let(:chef) { double("chef") }
 
   describe "#initialize" do
