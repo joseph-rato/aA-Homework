@@ -33,12 +33,23 @@ class Array
       when 0
         ans << left.shift
         ans << right.shift
+      end
     end
     ans + left + right
   end
 end
 
 def dominant_octopus(arr)
-  prc = Proc.new {|x,y| y.length <=> x.length}
-  arr.merge_sort(&prc)
+  prc = Proc.new {|x,y| y.size <=> x.size}
+  arr.merge_sort(&prc)[0]
+end
+
+def linear_biggest_fish(fishes)
+  ans = ""
+  fishes.each do |fish|
+    if fish.length > ans.length
+      ans = fish.length
+    end
+  end
+  ans
 end
