@@ -12,17 +12,33 @@ def sluggish_octopus(arr)
   ans_fish[0]
 end
 
+class Array
+
+  def merge_sort(&prc)
+    prc ||= Proc.new {|x,y| x <=> y}
+    return arr.first if arr.length == 1
+    half = arr.length / 2
+    left = (arr.take(half)).merge_sort(&prc)
+    right = (arr.drop(half)).merge_sort(&prc)
+    Array.merge_sort(left, right, &prc)
+  end
+  def merge_sort(left, right, &prc)
+    ans = []
+    until left.empty? || right.empty?
+      case prc.call(left.first, right.first)
+      when 1
+        ans << right.shift
+      when -1
+        ans << left.shift
+      when 0
+        ans << left.shift
+        ans << right.shift
+    end
+    ans + left + right
+  end
+end
+
 def dominant_octopus(arr)
-return arr.first if arr.length == 1
-half = arr.length / 2
-left = dominant_octopus(arr.take(half))
-right = dominant_octopus(arr.drop(half))
-  case left <=> right
-  when 1
-    return left
-  when -1
-    return right
-  when 0
-    return left
-  end 
+  prc = Proc.new {|x,y| y.length <=> x.length}
+  arr.merge_sort(&prc)
 end
