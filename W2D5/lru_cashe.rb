@@ -1,6 +1,7 @@
 class LRUCashe
-  attr_reader: :cashe
+  attr_reader :cashe
   def initialize(num)
+    @size = num
     @cashe = Array.new(num)
   end
 
@@ -8,8 +9,12 @@ class LRUCashe
     idx = @cashe.find_index(element)
     unless idx == nil
       @cashe.delete_at(idx)
-    end
-    @cashe << element
+    elsif @cashe.count >= sieze
+      @cashe.shift
+      @cashe << element
+    else
+      @cashe << element
+    end 
   end
 
   def count
@@ -17,7 +22,7 @@ class LRUCashe
   end
 
   def show
-    p @cashe 
+    p @cashe.reverse
   end
 
   private
