@@ -7,14 +7,15 @@ class LRUCashe
 
   def add(element)
     idx = @cashe.find_index(element)
-    unless idx == nil
+    if idx == nil
       @cashe.delete_at(idx)
+      @cashe << element
     elsif @cashe.count >= sieze
       @cashe.shift
       @cashe << element
     else
       @cashe << element
-    end 
+    end
   end
 
   def count
