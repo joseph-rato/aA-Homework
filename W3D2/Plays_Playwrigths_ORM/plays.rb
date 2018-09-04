@@ -11,15 +11,15 @@ class PlayDBConnection < SQLite3::Database
   end
 end
 
-class PlaywrightDBConnection < SQLite3::Database
-  include Singleton
-
-  def initialize
-    super('playwrights.db')
-    self.type_translation = true
-    self.results_as_hash = true
-  end
-end
+# class PlayDBConnection < SQLite3::Database
+#   include Singleton
+#
+#   def initialize
+#     super('playwrights.db')
+#     self.type_translation = true
+#     self.results_as_hash = true
+#   end
+# end
 
 class Play
   attr_accessor :title, :year, :playwright_id
@@ -42,7 +42,6 @@ class Play
   end
 
   def self.find_by_playwright(name)
-    PlaywrightDBConnection.instance
     PlayDBConnection.instance.execute(<<-SQL, name)
 
       SELECT
@@ -93,7 +92,7 @@ end
 class Playwright
 
 def self.all
-  data = PlaywrightDBConnection.instance.excute('SELECT * FROM playwrights')
+  data = PlayDBConnection.instance.excute('SELECT * FROM playwrights')
   data.map {|entry| Playwright.new(entry)}
 end
 
@@ -107,18 +106,18 @@ end
 
   def create
     raise "#{self} already in database" if @id
-    PlaywrightDBConnection.instance.execute(<<-SQL, @name, @birth_year)
+    PlayDBConnection.instance.execute(<<-SQL, @name, @birth_year)
       INSERT INTO
         playwrights (name, birth_year)
       VALUES
         (?, ?)
     SQL
-    @id = PlaywrightDBConnection.instance.last_insert_row_id
+    @id = PlayDBConnection.instance.last_insert_row_id
   end
 
   def update
     raise "#{self} not in database" unless @id
-    PlaywrightDBConnection.instance.execute(<<-SQL, @name, @birth_year, @id)
+    PlayDBConnection.instance.execute(<<-SQL, @name, @birth_year, @id)
       UPDATE
         playwrights
       SET
@@ -129,7 +128,7 @@ end
   end
 
   def get_plays
-    PlaywrightDBConnection.instance.execute(<<-SQL, self.name)
+    PlayDBConnection.instance.execute(<<-SQL, self.name)
       SELECT
         plays
       FROM
