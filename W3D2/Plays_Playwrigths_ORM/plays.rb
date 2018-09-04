@@ -11,6 +11,16 @@ class PlayDBConnection < SQLite3::Database
   end
 end
 
+class PlaywrightDBConnection < SQLite3::Database
+  include Singleton
+
+  def initialize
+    super('playwrights.db')
+    self.type_translation = true
+    self.results_as_hash = true
+  end
+end
+
 class Play
   attr_accessor :title, :year, :playwright_id
 
@@ -36,14 +46,14 @@ class Play
     PlayDBConnection.instance.execute(<<-SQL, name)
 
       SELECT
-        plays, name
+        title, playwrights.name
       FROM
        plays
       JOIN
-        plays
+        playwrights
         on play.playwright_id = playwrights.id
       WHERE
-        name = ?
+        playwrights.name = ?
     SQL
   end
 
@@ -78,20 +88,13 @@ class Play
   end
 end
 
-class PlayDBConnection < SQLite3::Database
-  include Singleton
 
-  def initialize
-    super('playwrights.db')
-    self.type_translation = true
-    self.results_as_hash = true
-  end
-end
 
 class Playwright
 
 def self.all
-  PlayDBConnection.instance.excute('SELECT * FROM playwrights')
+  data = PlaywrightDBConnection.instance.excute('SELECT * FROM playwrights')
+  data.map {|entry| Playwright.new(entry)}
 end
 
   attr_accessor :name, :birth_year
@@ -101,4 +104,43 @@ end
     @name = options['name']
     @birth_year = options['birth_year']
   end
+
+  def create
+    raise "#{self} already in database" if @id
+    PlaywrightDBConnection.instance.execute(<<-SQL, @name, @birth_year)
+      INSERT INTO
+        playwrights (name, birth_year)
+      VALUES
+        (?, ?)
+    SQL
+    @id = PlaywrightDBConnection.instance.last_insert_row_id
+  end
+
+  def update
+    raise "#{self} not in database" unless @id
+    PlaywrightDBConnection.instance.execute(<<-SQL, @name, @birth_year, @id)
+      UPDATE
+        playwrights
+      SET
+        name = ?, birth_year = ?
+      WHERE
+        id = ?
+    SQL
+  end
+
+  def get_plays
+    PlaywrightDBConnection.instance.execute(<<-SQL, self.name)
+      SELECT
+        plays
+      FROM
+        playwrights
+      JOIN
+        plays
+      ON
+        playwrights.id = plays.playwright_id
+      WHERE
+        playwrights.name = ?
+    SQL
+  end
+
 end
