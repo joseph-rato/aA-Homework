@@ -109,21 +109,28 @@ class MetaCorgiSnacks
     @box_id = box_id
   end
 
-  def method_missing(name, *args)
-
-    method_name = name.to_s
-    method_info = 'get_' + method_name + '_info'
-
-    method_taste = 'get_' + method_name + '_tastiness'
-    treat_info = @snack_box.send(method_info(@box_id))
-    treat_taste = @snack_box.send(method_taste(@box_id))
-    "method_name: #{treat_info}: #{treat_taste}"
-    # Your code goes here...
-    
-  end
+  # def method_missing(name, *args)
+  #
+  #   method_name = name.to_s
+  #   method_info = 'get_' + method_name + '_info'
+  #
+  #   method_taste = 'get_' + method_name + '_tastiness'
+  #   treat_info = @snack_box.send(method_info(@box_id))
+  #   treat_taste = @snack_box.send(method_taste(@box_id))
+  #   "method_name: #{treat_info}: #{treat_taste}"
+  #   # Your code goes here...
+  #
+  # end
 
 
   def self.define_snack(name)
+    define_method(name) do
+      treat_info = @snack_box.send("get_#{name}_info", @box_id)
+      treat_taste = @snack_box.send("get_#{name}_tastiness", @box_id)
+      result = "#{name}: #{treat_info}: #{treat_taste}"
+      treat_info > 30 ? "* #{result}" : result
+    end
     # Your code goes here...
+
   end
 end
