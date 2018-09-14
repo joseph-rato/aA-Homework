@@ -1,0 +1,17 @@
+<h1>CREATE THIS BAND?</h1>
+<br>
+<br>
+<form action="<%= bands_url %> " method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  <% if flash.now %>
+    <%= flash.now[:error].to_s %>
+  <% end %>
+  <br>
+  <br>
+  <br>
+  <label> Create this named band :
+    <input type="text" name="band[name]" value="">
+  </label>
+  <br>
+  <input type="submit" name="" value="CREATE BAND">
+</form>

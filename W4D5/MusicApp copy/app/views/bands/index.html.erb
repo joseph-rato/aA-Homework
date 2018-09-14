@@ -1,0 +1,12 @@
+<h1>ALL THE BANDSSSS</h1>
+<ul>
+
+  <% @bands.each do |band| %>
+  <li> <%= band.name %> </li>
+  <!-- <li>
+    <form action="<%#= redirect_to edit_band_url(band) %>" method="post">
+    <input type="hidden" name="authenticity_token" value="<%#= form_authenticity_token %>">
+    <input type="submit" name="" value="Edit Band!!!">
+  </form> </li> -->
+  <% end %>
+</ul>
