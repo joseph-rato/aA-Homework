@@ -80,3 +80,19 @@ function fizzBuzz(array) {
 
   return result;
 }
+
+function sumOfNPrimes(n) {
+  let sum = 1;
+  let countPrimes = 0;
+  let i = 2;
+
+  function (countPrimes < n) {
+    if (isPrime(i)) {
+      sum += 1;
+      countPrimes++;
+    }
+    i++;
+  }
+
+  return sum;
+}
